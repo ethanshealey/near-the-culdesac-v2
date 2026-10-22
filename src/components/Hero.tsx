@@ -5,8 +5,6 @@ import { getHero } from '@/lib/content';
 
 const Hero = async () => {
   const { photoUrl, width, height } = await getHero()
-  // The frame takes the photo's shape so nobody gets cropped out.
-  // Photos uploaded before sizes were saved fall back to square.
   const ratio = width && height ? width / height : 1
 
   return (

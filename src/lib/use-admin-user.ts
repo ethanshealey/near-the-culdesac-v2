@@ -9,7 +9,6 @@ export type AdminUserState =
   | { status: "signed-out" }
   | { status: "signed-in"; user: User; isAdmin: boolean };
 
-// Tracks the Firebase user and whether their token carries the admin claim.
 export function useAdminUser(): AdminUserState {
   const [state, setState] = useState<AdminUserState>(
     auth ? { status: "loading" } : { status: "signed-out" },

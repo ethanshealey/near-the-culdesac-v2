@@ -1,6 +1,3 @@
-// Sends the login code email through Resend's HTTP API (https://resend.com).
-// Without RESEND_API_KEY in development, the code is printed to the server
-// console instead so you can test the flow without an email provider.
 export async function sendLoginCodeEmail(to: string, code: string) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.LOGIN_EMAIL_FROM;

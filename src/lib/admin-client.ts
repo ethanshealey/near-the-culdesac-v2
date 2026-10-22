@@ -1,11 +1,9 @@
 "use client";
 
-// Browser-side helpers for the admin editors.
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, storage } from "@/lib/firebase";
 import type { ActionResult } from "@/app/admin/actions";
 
-/** Calls a server action with the signed-in user's ID token, throwing on failure. */
 export async function callAction<T>(
   action: (idToken: string) => Promise<ActionResult<T>>,
 ): Promise<T> {
@@ -17,7 +15,6 @@ export async function callAction<T>(
   return result.data;
 }
 
-/** Shrinks a photo to at most `maxSize` px on its longest side, as a JPEG, and reports its new size. */
 async function resizeImage(file: File, maxSize = 1600) {
   const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
   const scale = Math.min(1, maxSize / Math.max(bitmap.width, bitmap.height));
@@ -38,7 +35,6 @@ async function resizeImage(file: File, maxSize = 1600) {
   return { blob, width: canvas.width, height: canvas.height };
 }
 
-/** Uploads a photo to Storage under `folder` and returns where it lives. */
 export async function uploadPhoto(folder: "members" | "hero", file: File, maxSize?: number) {
   if (!storage) throw new Error("Firebase Storage isn't configured.");
 
@@ -47,7 +43,6 @@ export async function uploadPhoto(folder: "members" | "hero", file: File, maxSiz
   const photoRef = ref(storage, path);
   await uploadBytes(photoRef, blob, {
     contentType: "image/jpeg",
-    // Each upload gets a new path, so browsers can cache it forever.
     cacheControl: "public, max-age=31536000, immutable",
   });
 

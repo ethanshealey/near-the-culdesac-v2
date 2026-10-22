@@ -26,6 +26,4 @@ export const auth = firebaseApp ? getAuth(firebaseApp) : null;
 export const db = firebaseApp ? getFirestore(firebaseApp) : null;
 export const storage = firebaseApp ? getStorage(firebaseApp) : null;
 
-// Uploads retry silently for 10 minutes by default; give up sooner so the
-// admin sees an error instead of "Uploading…" forever.
 if (storage) storage.maxUploadRetryTime = 30_000;

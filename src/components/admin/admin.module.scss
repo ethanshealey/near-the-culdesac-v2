@@ -1,8 +1,5 @@
-// Admin styles, matching the public site: dark cards, handwritten headings,
-// small-caps labels and pill buttons.
 @use '../../styles/tokens' as *;
 
-// Pill buttons, shaped like the gig "Info" link.
 @mixin pill {
     display: inline-flex;
     align-items: center;
@@ -23,14 +20,12 @@
     }
 }
 
-// --- Sign-in ---------------------------------------------------------------
-
 .page {
     min-height: 100vh;
     display: grid;
     place-items: center;
     padding: 2rem 1rem;
-    color-scheme: dark; // dark date pickers, scrollbars and form controls
+    color-scheme: dark; 
 }
 
 .card {
@@ -75,9 +70,6 @@
     text-align: center;
 }
 
-// --- Buttons ---------------------------------------------------------------
-
-// Filled: the main action in each place.
 .primary {
     @include pill;
     border: 1px solid $text;
@@ -89,7 +81,6 @@
     }
 }
 
-// Outlined: everything else.
 .secondary {
     @include pill;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -127,8 +118,6 @@
     }
 }
 
-// --- Messages --------------------------------------------------------------
-
 .muted {
     color: $muted;
 }
@@ -141,15 +130,12 @@
     color: #fca5a5;
 }
 
-// --- Dashboard -------------------------------------------------------------
-
 .dashboard {
     min-height: 100vh;
     padding-bottom: 5rem;
     color-scheme: dark;
 }
 
-// The same sticky bar as the public site's header.
 .topbar {
     position: sticky;
     top: 0;
@@ -180,7 +166,6 @@
         gap: 0.75rem;
         padding: 0 1rem;
 
-        // The email and title don't fit next to the buttons on phones.
         h1,
         .muted {
             display: none;
@@ -232,8 +217,6 @@
     color: $muted;
 }
 
-// --- Fields ----------------------------------------------------------------
-
 .fields {
     flex: 1 1 320px;
     display: grid;
@@ -254,7 +237,6 @@
     gap: 1rem;
 }
 
-// Text boxes everywhere: sunk into the card, brighter border when focused.
 .form input,
 .fields input,
 .fields textarea {
@@ -301,8 +283,6 @@
     color: #fca5a5;
 }
 
-// --- Photos ----------------------------------------------------------------
-
 .photo {
     flex: 0 0 180px;
     display: grid;
@@ -321,8 +301,6 @@
         text-align: center;
     }
 }
-
-// An undeveloped photo, as on the public site.
 .photoPlaceholder {
     width: 180px;
     aspect-ratio: 1;
@@ -335,7 +313,6 @@
     color: rgba(255, 255, 255, 0.4);
 }
 
-// The banner preview sits in the same polaroid frame as on the home page.
 .heroPreview {
     display: block;
     width: min(100%, 520px);
@@ -349,7 +326,6 @@
 div.heroPreview {
     height: 260px;
     border-radius: 0;
-    // The frame's padding shows the paper; the "photo" inside is a dark fill.
     background: linear-gradient(#2b2a28, #2b2a28) content-box, $paper;
 }
 

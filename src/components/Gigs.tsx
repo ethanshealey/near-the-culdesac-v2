@@ -2,8 +2,6 @@ import { Suspense } from 'react'
 import { getGigsByStatus } from '@/lib/content'
 import type { Gig } from '@/lib/content-types'
 
-// Gig dates are plain "YYYY-MM-DD" strings. Read and format them in UTC so
-// the server's own time zone can't shift a gig onto the day before.
 const formatDate = (date: string, options: Intl.DateTimeFormatOptions) =>
   new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', { ...options, timeZone: 'UTC' })
 
@@ -11,8 +9,6 @@ const Gigs = () => {
   return (
     <section id="gigs" aria-labelledby="gigs-title">
         <h2 id="gigs-title" className="gigs-title">Catch Us Live</h2>
-        {/* Which gigs are upcoming depends on today's date, so the list renders
-            per request; the heading above is still part of the static page. */}
         <Suspense fallback={<p className='gigs-empty'>Loading shows…</p>}>
             <GigList />
         </Suspense>

@@ -1,6 +1,5 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- admin previews don't need next/image */
 import { useState, type FormEvent } from "react";
 import { deleteMember, moveMember, saveMember, setMemberPhoto } from "@/app/admin/actions";
 import { callAction, errorMessage, uploadPhoto } from "@/lib/admin-client";
@@ -38,7 +37,7 @@ export default function MembersEditor({ members }: { members: Member[] }) {
 }
 
 type MemberFormProps = {
-  member: Member | null; // null = a new, unsaved member
+  member: Member | null;
   isFirst?: boolean;
   isLast?: boolean;
   onDone?: () => void;
@@ -48,7 +47,7 @@ function MemberForm({ member, isFirst, isLast, onDone }: MemberFormProps) {
   const [name, setName] = useState(member?.name ?? "");
   const [role, setRole] = useState(member?.role ?? "");
   const [bio, setBio] = useState(member?.bio ?? "");
-  const [busy, setBusy] = useState<string | null>(null); // what's in progress, for the button label
+  const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<{ text: string; error?: boolean } | null>(null);
 
   const dirty =
@@ -72,7 +71,7 @@ function MemberForm({ member, isFirst, isLast, onDone }: MemberFormProps) {
     run("Saving…", async () => {
       await callAction((token) => saveMember(token, member?.id ?? null, { name, role, bio }));
       if (!member) {
-        onDone?.(); // the saved member now arrives from the server in the list below
+        onDone?.();
         return;
       }
       return "Saved.";
@@ -107,7 +106,7 @@ function MemberForm({ member, isFirst, isLast, onDone }: MemberFormProps) {
                 disabled={!!busy}
                 onChange={(e) => {
                   changePhoto(e.target.files?.[0]);
-                  e.target.value = ""; // allow picking the same file again
+                  e.target.value = "";
                 }}
               />
             </label>

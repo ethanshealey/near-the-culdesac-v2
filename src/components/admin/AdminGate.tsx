@@ -18,7 +18,6 @@ async function postJson<T>(url: string, body: unknown): Promise<T> {
   return data as T;
 }
 
-/** Shows the sign-in flow until an admin is signed in, then renders children. */
 export default function AdminGate({ children }: { children: ReactNode }) {
   const adminUser = useAdminUser();
 
@@ -109,7 +108,6 @@ function SignInForm() {
     event.preventDefault();
     run(async () => {
       const { token } = await postJson<{ token: string }>("/api/auth/verify-code", { email, code });
-      // useAdminUser picks up the new user via onIdTokenChanged.
       await signInWithCustomToken(auth!, token);
     });
   };

@@ -1,6 +1,5 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- admin previews don't need next/image */
 import { useState } from "react";
 import { setHeroPhoto } from "@/app/admin/actions";
 import { callAction, errorMessage, uploadPhoto } from "@/lib/admin-client";
@@ -27,7 +26,6 @@ export default function HeroEditor({ hero }: { hero: HeroContent }) {
   const changePhoto = (file: File | undefined) => {
     if (!file) return;
     run("Uploading…", async () => {
-      // Larger than member photos: the hero fills half the screen.
       const photo = await uploadPhoto("hero", file, 2400);
       await callAction((token) => setHeroPhoto(token, photo));
       return "Photo updated.";
@@ -57,7 +55,7 @@ export default function HeroEditor({ hero }: { hero: HeroContent }) {
               disabled={!!busy}
               onChange={(e) => {
                 changePhoto(e.target.files?.[0]);
-                e.target.value = ""; // allow picking the same file again
+                e.target.value = "";
               }}
             />
           </label>

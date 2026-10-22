@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import Image from 'next/image'
 import type { Member } from '@/lib/content-types'
 
-// Bios are plain text with blank lines between paragraphs.
 const paragraphs = (bio: string) => bio.split(/\n\s*\n/).filter((p) => p.trim())
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -12,11 +11,9 @@ const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: r
 export default function MembersCarousel({ members }: { members: Member[] }) {
   const gridRef = useRef<HTMLUListElement>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
-  const [current, setCurrent] = useState(0) // the centered card on mobile
-  const [selected, setSelected] = useState<Member | null>(null) // whose bio is open
+  const [current, setCurrent] = useState(0)
+  const [selected, setSelected] = useState<Member | null>(null) 
 
-  // Keep `current` in sync as people swipe. A card counts as current once
-  // most of it is in view; on desktop the arrows are hidden, so it's unused.
   useEffect(() => {
     const grid = gridRef.current
     if (!grid) return
@@ -34,7 +31,6 @@ export default function MembersCarousel({ members }: { members: Member[] }) {
     return () => observer.disconnect()
   }, [members])
 
-  // showModal() (not show()) traps focus, handles Esc, and adds the backdrop.
   useEffect(() => {
     if (selected) dialogRef.current?.showModal()
   }, [selected])
@@ -47,9 +43,6 @@ export default function MembersCarousel({ members }: { members: Member[] }) {
     })
   }
 
-  // closedby="any" closes on a backdrop click natively; Safari doesn't support
-  // it yet, so do it by hand there. Clicks on the backdrop target the dialog
-  // itself and land outside its box.
   const closeOnBackdropClick = (event: MouseEvent<HTMLDialogElement>) => {
     if ('closedBy' in HTMLDialogElement.prototype) return
     const dialog = event.currentTarget
@@ -80,8 +73,6 @@ export default function MembersCarousel({ members }: { members: Member[] }) {
             {members.map((member) => (
                 <li className='member' key={member.id}>
                     {member.photoUrl ? (
-                        // Empty alt: the name is right below, so screen readers
-                        // would otherwise hear it twice.
                         <Image
                             className='member-photo'
                             src={member.photoUrl}
@@ -101,7 +92,6 @@ export default function MembersCarousel({ members }: { members: Member[] }) {
                         {member.bio && <span className='member-more' aria-hidden>Read bio →</span>}
                     </div>
 
-                    {/* Covers the whole card so anywhere on it opens the bio. */}
                     {member.bio && (
                         <button type='button' className='member-open' onClick={() => setSelected(member)}>
                             <span className='visually-hidden'>Read {member.name}&apos;s bio</span>
@@ -145,7 +135,6 @@ export default function MembersCarousel({ members }: { members: Member[] }) {
                             <p key={i} className='member-bio'>{paragraph}</p>
                         ))}
                     </div>
-                    {/* A form with method="dialog" closes the dialog when submitted. */}
                     <form method='dialog'>
                         <button className='member-dialog-close' aria-label='Close'>✕</button>
                     </form>

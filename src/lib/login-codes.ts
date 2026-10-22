@@ -1,13 +1,9 @@
-// One-time login codes, stored in Firestore via the Admin SDK.
-//
-// Only a hash of each code is stored, so reading the database doesn't reveal
-// live codes. Each email has at most one active code at a time.
 import { createHash, randomInt, timingSafeEqual } from "node:crypto";
 import { adminDb } from "@/lib/firebase-admin";
 
-const CODE_TTL_MS = 10 * 60 * 1000; // a code is valid for 10 minutes
-const RESEND_COOLDOWN_MS = 60 * 1000; // at most one email per minute per address
-const MAX_ATTEMPTS = 5; // wrong guesses allowed before the code is burned
+const CODE_TTL_MS = 10 * 60 * 1000;
+const RESEND_COOLDOWN_MS = 60 * 1000;
+const MAX_ATTEMPTS = 5;
 
 type LoginCodeDoc = {
   codeHash: string;
@@ -20,7 +16,6 @@ export const normalizeEmail = (email: string) => email.trim().toLowerCase();
 
 const sha256 = (value: string) => createHash("sha256").update(value).digest("hex");
 
-// Keyed by a hash of the email so the doc id is always valid and opaque.
 const codeDoc = (email: string) => adminDb().collection("loginCodes").doc(sha256(email));
 
 export function isAllowedEmail(email: string) {
@@ -58,7 +53,6 @@ export type VerifyResult = "ok" | "invalid" | "expired" | "too-many-attempts";
 export async function verifyCode(email: string, code: string): Promise<VerifyResult> {
   const ref = codeDoc(email);
 
-  // A transaction so two simultaneous guesses can't both slip past the attempt limit.
   return adminDb().runTransaction(async (tx) => {
     const data = (await tx.get(ref)).data() as LoginCodeDoc | undefined;
     if (!data) return "invalid";
@@ -79,7 +73,6 @@ export async function verifyCode(email: string, code: string): Promise<VerifyRes
       return "invalid";
     }
 
-    // Single use: a correct code is consumed immediately.
     tx.delete(ref);
     return "ok";
   });

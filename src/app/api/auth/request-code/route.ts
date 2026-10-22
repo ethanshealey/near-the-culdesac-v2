@@ -9,8 +9,6 @@ export async function POST(request: Request) {
     return Response.json({ error: "Enter a valid email address." }, { status: 400 });
   }
 
-  // Respond the same way whether or not the email is allowed, so this endpoint
-  // can't be used to discover which addresses are admins.
   if (!isAllowedEmail(email)) {
     return Response.json({ ok: true });
   }

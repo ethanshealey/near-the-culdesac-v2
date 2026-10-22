@@ -21,15 +21,11 @@ export async function POST(request: Request) {
     return Response.json({ error: ERRORS[result] }, { status: 401 });
   }
 
-  // The code proves the user owns this email, so find or create their account.
   const auth = adminAuth();
   const user = await auth
     .getUserByEmail(email)
     .catch(() => auth.createUser({ email, emailVerified: true }));
 
-  // Codes are only issued to allowlisted emails, so anyone who gets this far is
-  // an admin. The claim lives on the account, so security rules can check
-  // `request.auth.token.admin == true`.
   if (!user.customClaims?.admin) {
     await auth.setCustomUserClaims(user.uid, { ...user.customClaims, admin: true });
   }

@@ -1,30 +1,28 @@
-// Shapes of the site's editable content. Safe to import from client and server.
-
 export type HeroContent = {
   photoUrl: string | null;
-  photoPath: string | null; // location in Firebase Storage
-  width: number | null; // pixel size of the uploaded photo
+  photoPath: string | null;
+  width: number | null;
   height: number | null;
 };
 
 export type Member = {
   id: string;
   name: string;
-  role: string; // e.g. "Drums, vocals"
-  bio: string; // plain text; blank lines separate paragraphs
+  role: string;
+  bio: string;
   photoUrl: string | null;
-  photoPath: string | null; // location in Firebase Storage
-  order: number; // display order, lowest first
+  photoPath: string | null;
+  order: number;
 };
 
 export type Gig = {
   id: string;
-  date: string; // "YYYY-MM-DD", in the band's local time zone
-  time: string; // free text, e.g. "Doors 7pm" (may be empty)
+  date: string;
+  time: string;
   venue: string;
-  city: string; // may be empty
-  link: string; // event page or tickets URL (may be empty)
-  notes: string; // e.g. "with The Somebodies" (may be empty)
+  city: string;
+  link: string;
+  notes: string;
 };
 
 export type MemberInput = Pick<Member, "name" | "role" | "bio">;

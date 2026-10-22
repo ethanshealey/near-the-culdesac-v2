@@ -9,14 +9,12 @@ import styles from "./admin.module.scss";
 
 const EMPTY_GIG: GigInput = { date: "", time: "", venue: "", city: "", link: "", notes: "" };
 
-// The browser's local date, which is close enough for labeling in the editor.
-const localToday = () => new Date().toLocaleDateString("en-CA");
+const localToday = () => new Date().toLocaleDateString("en-NY");
 
 export default function GigsEditor({ gigs }: { gigs: Gig[] }) {
   const [adding, setAdding] = useState(false);
   const today = localToday();
 
-  // Newest first, so upcoming gigs sit at the top where they get edited most.
   const sorted = [...gigs].reverse();
 
   return (
@@ -41,7 +39,7 @@ export default function GigsEditor({ gigs }: { gigs: Gig[] }) {
 }
 
 type GigFormProps = {
-  gig: Gig | null; // null = a new, unsaved gig
+  gig: Gig | null;
   isPast?: boolean;
   onDone?: () => void;
 };

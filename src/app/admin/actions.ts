@@ -1,15 +1,11 @@
 "use server";
 
-// Every content edit goes through these actions. Each one verifies the caller's
-// Firebase ID token carries the admin claim, validates the input, writes with
-// the Admin SDK, and refreshes the cached content so the change is live.
 import { updateTag } from "next/cache";
 import { adminAuth, adminBucket, adminDb } from "@/lib/firebase-admin";
 import type { GigInput, MemberInput } from "@/lib/content-types";
 
 export type ActionResult<T = void> = { ok: true; data: T } | { ok: false; error: string };
 
-// Errors whose message is safe to show the user.
 class UserError extends Error {}
 
 async function asAdmin<T>(idToken: string, fn: () => Promise<T>): Promise<ActionResult<T>> {
@@ -42,8 +38,6 @@ async function deletePhoto(path: string | null | undefined) {
 const members = () => adminDb().collection("members");
 const gigs = () => adminDb().collection("gigs");
 
-// --- Members ---------------------------------------------------------------
-
 export async function saveMember(idToken: string, id: string | null, input: MemberInput) {
   return asAdmin(idToken, async () => {
     const data = {
@@ -56,7 +50,6 @@ export async function saveMember(idToken: string, id: string | null, input: Memb
     if (savedId) {
       await members().doc(savedId).update(data);
     } else {
-      // New members go to the end of the list.
       const last = await members().orderBy("order", "desc").limit(1).get();
       const order = last.empty ? 0 : (last.docs[0].data().order ?? 0) + 1;
       savedId = (await members().add({ ...data, order, photoUrl: null, photoPath: null })).id;
@@ -71,8 +64,6 @@ type UploadedPhoto = { path: string; url: string; width: number; height: number 
 
 const PHOTO_URL_PREFIX = "https://firebasestorage.googleapis.com/";
 
-// Uploads come from the browser, so make sure they point at our own bucket
-// and at a file the upload helper could have created in the right folder.
 function checkPhoto(photo: UploadedPhoto | null, folder: "members" | "hero") {
   const path = new RegExp(`^${folder}/[0-9a-f-]{36}\\.jpg$`);
   const validSize = (n: number) => Number.isInteger(n) && n > 0 && n <= 10_000;
@@ -87,7 +78,6 @@ function checkPhoto(photo: UploadedPhoto | null, folder: "members" | "hero") {
   }
 }
 
-/** Point a member at a newly uploaded photo (or null to remove it). */
 export async function setMemberPhoto(idToken: string, id: string, photo: UploadedPhoto | null) {
   return asAdmin(idToken, async () => {
     checkPhoto(photo, "members");
@@ -108,7 +98,6 @@ export async function moveMember(idToken: string, id: string, direction: -1 | 1)
     const neighbor = docs[index + direction];
     if (index === -1 || !neighbor) return;
 
-    // Renumber everyone so orders stay unique even if they had drifted.
     const reordered = docs.map((doc) => doc.id);
     [reordered[index], reordered[index + direction]] = [neighbor.id, id];
 
@@ -131,21 +120,16 @@ export async function deleteMember(idToken: string, id: string) {
   });
 }
 
-// --- Hero ------------------------------------------------------------------
-
-/** Set the home page's hero photo (or null to remove it). */
 export async function setHeroPhoto(idToken: string, photo: UploadedPhoto | null) {
   return asAdmin(idToken, async () => {
     checkPhoto(photo, "hero");
 
     const ref = adminDb().collection("settings").doc("hero");
     const previous = (await ref.get()).data()?.photoPath;
-    // set + merge, since the doc doesn't exist until the first upload.
     await ref.set(
       {
         photoPath: photo?.path ?? null,
         photoUrl: photo?.url ?? null,
-        // Lets the home page size the frame to the photo without cropping it.
         width: photo?.width ?? null,
         height: photo?.height ?? null,
       },
@@ -156,8 +140,6 @@ export async function setHeroPhoto(idToken: string, photo: UploadedPhoto | null)
     updateTag("hero");
   });
 }
-
-// --- Gigs ------------------------------------------------------------------
 
 export async function saveGig(idToken: string, id: string | null, input: GigInput) {
   return asAdmin(idToken, async () => {

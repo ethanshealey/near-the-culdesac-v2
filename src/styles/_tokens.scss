@@ -1,27 +1,19 @@
-// Design values shared by every stylesheet. Load with:
-//   @use '<relative path>/styles/tokens' as *;
-// The leading underscore marks this as a "partial": it only holds variables
-// and mixins, so it outputs no CSS of its own.
-
 $bg: #141414;
-$surface: #1e1e1e; // cards and dialogs, one step up from the background
+$surface: #1e1e1e;
 $border: rgba(255, 255, 255, 0.06);
 $text: #e9e9e9;
 $muted: rgba(255, 255, 255, 0.6);
-$paper: #f4f1ea; // polaroid frames
+$paper: #f4f1ea;
 $header-height: 64px;
 $sharpie: 'Caveat', cursive;
-$mobile: 900px; // below this, layouts switch to their phone versions
+$mobile: 900px;
 
-// The handwritten heading at the top of each section. A mixin is a reusable
-// block of styles: `@include section-heading;` pastes these rules in.
 @mixin section-heading {
     font-family: $sharpie;
     font-size: clamp(1.75rem, 4vw, 2.75rem);
     margin-bottom: 1.5rem;
 }
 
-// Small uppercase labels, like a member's role or a gig's city and time.
 @mixin small-caps {
     font-size: 0.65rem;
     font-weight: 600;

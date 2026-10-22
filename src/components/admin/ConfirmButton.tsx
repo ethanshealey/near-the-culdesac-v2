@@ -3,7 +3,6 @@
 import { useState } from "react";
 import styles from "./admin.module.scss";
 
-/** A destructive button that asks "Are you sure?" inline before acting. */
 export default function ConfirmButton({
   label,
   onConfirm,
