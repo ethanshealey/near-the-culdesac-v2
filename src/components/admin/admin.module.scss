@@ -1,0 +1,358 @@
+// Admin styles, matching the public site: dark cards, handwritten headings,
+// small-caps labels and pill buttons.
+@use '../../styles/tokens' as *;
+
+// Pill buttons, shaped like the gig "Info" link.
+@mixin pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-family: inherit;
+    @include small-caps;
+    font-size: 0.7rem;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, opacity 0.2s;
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+// --- Sign-in ---------------------------------------------------------------
+
+.page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1rem;
+    color-scheme: dark; // dark date pickers, scrollbars and form controls
+}
+
+.card {
+    width: 100%;
+    max-width: 420px;
+    display: grid;
+    gap: 1.25rem;
+    padding: 2.5rem 2rem;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: 16px;
+    line-height: 1.5;
+    text-align: center;
+
+    h1 {
+        @include section-heading;
+        margin-bottom: 0;
+    }
+}
+
+.logo {
+    justify-self: center;
+    width: 160px;
+    color: $text;
+}
+
+.form {
+    display: grid;
+    gap: 0.75rem;
+    text-align: left;
+
+    label {
+        @include small-caps;
+        color: $muted;
+    }
+}
+
+.code {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: 1.5rem !important;
+    letter-spacing: 0.5em;
+    text-align: center;
+}
+
+// --- Buttons ---------------------------------------------------------------
+
+// Filled: the main action in each place.
+.primary {
+    @include pill;
+    border: 1px solid $text;
+    background: $text;
+    color: $bg;
+
+    &:hover:not(:disabled) {
+        background: #fff;
+    }
+}
+
+// Outlined: everything else.
+.secondary {
+    @include pill;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: none;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.08);
+    }
+}
+
+.danger {
+    @include pill;
+    border: 1px solid rgba(252, 165, 165, 0.35);
+    background: none;
+    color: #fca5a5;
+
+    &:hover:not(:disabled) {
+        background: rgba(252, 165, 165, 0.1);
+    }
+}
+
+.link {
+    justify-self: center;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: $sharpie;
+    font-size: 1.15rem;
+    color: $muted;
+    cursor: pointer;
+
+    &:hover {
+        color: #fff;
+    }
+}
+
+// --- Messages --------------------------------------------------------------
+
+.muted {
+    color: $muted;
+}
+
+.success {
+    color: #86efac;
+}
+
+.error {
+    color: #fca5a5;
+}
+
+// --- Dashboard -------------------------------------------------------------
+
+.dashboard {
+    min-height: 100vh;
+    padding-bottom: 5rem;
+    color-scheme: dark;
+}
+
+// The same sticky bar as the public site's header.
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    height: $header-height;
+    padding: 0 2rem;
+    margin-bottom: 2.5rem;
+    background: $bg;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    .logo {
+        width: auto;
+        height: 65%;
+    }
+
+    h1 {
+        margin-right: auto;
+        font-family: $sharpie;
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: $muted;
+    }
+
+    @media (max-width: 600px) {
+        gap: 0.75rem;
+        padding: 0 1rem;
+
+        // The email and title don't fit next to the buttons on phones.
+        h1,
+        .muted {
+            display: none;
+        }
+
+        .logo {
+            margin-right: auto;
+        }
+    }
+}
+
+.section {
+    max-width: 900px;
+    margin: 0 auto 3.5rem;
+    padding: 0 1rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    h2 {
+        @include section-heading;
+        margin-bottom: 0;
+    }
+}
+
+.item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: 16px;
+}
+
+.past {
+    opacity: 0.6;
+}
+
+.badge {
+    justify-self: start;
+    @include small-caps;
+    color: $muted;
+}
+
+// --- Fields ----------------------------------------------------------------
+
+.fields {
+    flex: 1 1 320px;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+
+    label {
+        display: grid;
+        gap: 0.4rem;
+        @include small-caps;
+        color: $muted;
+    }
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+// Text boxes everywhere: sunk into the card, brighter border when focused.
+.form input,
+.fields input,
+.fields textarea {
+    padding: 0.7rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: $bg;
+    color: $text;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
+    transition: border-color 0.2s;
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    &:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+.fields textarea {
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.confirm {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: $sharpie;
+    font-size: 1.15rem;
+    color: #fca5a5;
+}
+
+// --- Photos ----------------------------------------------------------------
+
+.photo {
+    flex: 0 0 180px;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+
+    img {
+        width: 180px;
+        aspect-ratio: 1;
+        object-fit: cover;
+        object-position: center top;
+        border-radius: 12px;
+    }
+
+    label.secondary {
+        text-align: center;
+    }
+}
+
+// An undeveloped photo, as on the public site.
+.photoPlaceholder {
+    width: 180px;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #2b2a28;
+    font-family: $sharpie;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+// The banner preview sits in the same polaroid frame as on the home page.
+.heroPreview {
+    display: block;
+    width: min(100%, 520px);
+    margin: 0 auto;
+    padding: 12px 12px 44px;
+    background: $paper;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    transform: rotate(-1.5deg);
+}
+
+div.heroPreview {
+    height: 260px;
+    border-radius: 0;
+    // The frame's padding shows the paper; the "photo" inside is a dark fill.
+    background: linear-gradient(#2b2a28, #2b2a28) content-box, $paper;
+}
+
+.actions label.secondary {
+    cursor: pointer;
+}

@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Admins only, and only reasonably sized images.
+    function isAdminImageUpload() {
+      return request.auth != null
+        && request.auth.token.admin == true
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Member and hero photos: anyone can view; only admins can upload.
+    // Deleting happens server-side via the Admin SDK.
+    match /members/{fileName} {
+      allow read: if true;
+      allow create: if isAdminImageUpload();
+    }
+
+    match /hero/{fileName} {
+      allow read: if true;
+      allow create: if isAdminImageUpload();
+    }
+  }
+}
