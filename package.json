@@ -27,5 +27,10 @@
     "eslint-config-next": "16.4.2",
     "sass": "^1.105.2",
     "typescript": "^5"
+  },
+  "overrides": {
+    "jwks-rsa": {
+      "jose": "^5.10.0"
+    }
   }
 }
